@@ -1,0 +1,65 @@
+import os
+import stat
+import time
+import sys
+
+def file_info(filename):
+
+# Check if the file or directory exists
+
+if not os.path.exists(filename):
+        print(f"File or directory '{filename}' does not exist.")
+        return
+
+
+# Check if the file is a regular (ordinary) file
+   
+if os.path.isfile(filename):
+        # Display file information
+        print(f"File '{filename}' exists.")
+
+        # Display access permissions
+        permissions = stat.filemode(os.stat(filename).st_mode)
+        print(f"Access Permissions: {permissions}")
+
+        # Display file size
+        size = os.path.getsize(filename)
+        print(f"File Size: {size} bytes")
+
+        # Display the time of last modification
+        modification_time = os.path.getmtime(filename)
+        formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(modification_time))
+        print(f"Last Modification Time: {formatted_time}")
+
+    # Check if the file is a directory
+    elif os.path.isdir(filename):
+
+# Display directory information
+
+print(f"Directory '{filename}' exists.")
+
+        # Count the number of files and subdirectories
+        file_count = 0
+        dir_count = 0
+        for _, dirs, files in os.walk(filename):
+            file_count += len(files)
+            dir_count += len(dirs)
+
+        print(f"Number of files in the directory: {file_count}")
+        print(f"Number of subdirectories in the directory: {dir_count}")
+
+    else:
+        print(f"'{filename}' is neither a file nor a directory.")
+
+if __name__ == "__main__":
+    # Check if the correct number of command line arguments is provided
+    if len(sys.argv) != 2:
+        print("Usage: python file_info.py <filename>")
+        sys.exit(1)
+
+
+# Get the filename from the command line argument
+filename = sys.argv[1]
+
+    # Call the function to display file or directory information
+    file_info(filename)
